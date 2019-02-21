@@ -1,0 +1,65 @@
+﻿@model PresentationLayer.Models.ViewModels.GetAmountViewModel
+
+@{
+    ViewBag.Title = "Bill";
+}
+
+<h2>Bill</h2>
+
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Categories)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Categories)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendors)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendors)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniqueID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniqueID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+    </dl>
+</div>
+@if (Model.Amount != 0)
+{
+    using (Html.BeginForm("MakePayment", "Home"))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                <input type="submit" value="Make Payment" class="btn btn-default" />
+            </div>
+        </div>
+        }
+
+    }
+<p>
+ 
+    @Html.ActionLink("Back to List", "Index")
+</p>

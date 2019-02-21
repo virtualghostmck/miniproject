@@ -1,0 +1,234 @@
+﻿using System;
+using PresentationLayer.Areas.Admin.Controllers;
+using PresentationLayer.Areas.Admin.Models;
+using BusinessLogicLayer;
+using DataAccessLayer;
+using NSubstitute;
+using Entities;
+using System.Web.Mvc;
+using NSubstituteAutoMocker;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Web;
+
+namespace OnlineBillPaymentSystemTest
+{
+    [TestFixture]
+    public class BusinessMTest
+    {
+        IAdminServices adminService;
+        IUserService userService;
+        Validation validation;
+        Customers customer;
+        string email;
+        List<Vendors> vendorList;
+        List<Transactions> transactions;
+        List<Categories> categoryList;
+        AccountDetails accountDetails;
+        List<Report> reportList;
+
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            adminService = Substitute.For<IAdminServices>();
+            userService = Substitute.For<IUserService>();
+            validation = new Validation(adminService, userService);
+            customer = new Customers { CustomerName = "Abc", ContactInfo = new ContactComplexType(), CustomerID = 1, CityID = 123, Gender = "male", Password = "password" };
+            email = "abc@xyz.com";
+            vendorList = new List<Vendors>()
+            {
+                new Vendors {VendorID=1, VendorName="v1", ContactInfo= new ContactComplexType() },
+                new Vendors {VendorID=2, VendorName="v2", ContactInfo= new ContactComplexType() },
+                new Vendors {VendorID=3, VendorName="v3", ContactInfo= new ContactComplexType() },
+                new Vendors {VendorID=4, VendorName="v4", ContactInfo= new ContactComplexType() },
+            };
+            transactions = new List<Transactions>()
+            {
+                new Transactions { TransactionID="t1", UniqueID="u1", Amount=123, TransactionDate=DateTime.Now},
+                new Transactions { TransactionID="t2", UniqueID="u2", Amount=123, TransactionDate=DateTime.Now},
+                new Transactions { TransactionID="t3", UniqueID="u3", Amount=123, TransactionDate=DateTime.Now},
+                new Transactions { TransactionID="t4", UniqueID="u4", Amount=123, TransactionDate=DateTime.Now},
+            };
+            categoryList = new List<Categories>()
+            {
+                new Categories {CategoryID=1, CategoryName="c1",Description="cd1" },
+                new Categories {CategoryID=1, CategoryName="c2",Description="cd2" },
+                new Categories {CategoryID=1, CategoryName="c3",Description="cd3" },
+            };
+            accountDetails = new AccountDetails { BankAcNo = 12345, BankName = "abc", BranchName = "xyz", CustomerID = 123, IFSC = 123293 };
+            reportList = new List<Report>
+            {
+                new Report {Amount=100, CategoryName="c1", CustomerName="Customer1", TransactionID="t1", UniqueID="u1", City="City1" },
+                new Report {Amount=200, CategoryName="c2", CustomerName="Customer2", TransactionID="t2", UniqueID="u2", City="City2" },
+                new Report {Amount=300, CategoryName="c3", CustomerName="Customer3", TransactionID="t3", UniqueID="u3", City="City3" },
+            };
+        }
+
+        #region testcases
+
+        [Test]
+        public void GetUser()
+        {
+            userService.GetUserByEmail(Arg.Any<string>()).Returns(customerList[0]);
+
+            Customers checkCustomer = validation.GetValidUserByEmail(email);
+
+            Assert.That(checkCustomer, Is.EqualTo(customerList[0]));
+            
+        }
+
+        [Test]
+        public void TransactionsByCustomerTest()
+        {
+            
+            userService.GetTransactions(Arg.Any<int>()).Returns(transactions);
+
+            List<Transactions>checkTransactions = validation.GetTransactions(customerList[0].CustomerID);
+
+            Assert.That(checkTransactions,Is.EqualTo(transactions));
+        }
+
+        [Test]
+        public void GetCategoriesTest()
+        {
+           
+            userService.GetCategories().Returns(categoryList);
+
+            List<Categories>checkCategories = validation.GetCategories();
+
+            Assert.That(checkCategories, Is.EqualTo(categoryList));
+        }
+
+        [Test]
+        public void GetVendorTest()
+        {
+            
+            adminService.GetAllVendors().Returns(vendorList);
+
+            List<Vendors>checkVendorList = validation.GetAllVendors();
+
+            Assert.That(checkVendorList, Is.EqualTo(vendorList));
+        }
+
+        [Test]
+        public void UpdateUserTest()
+        {
+            userService.UpdateUser(Arg.Any<Customers>(),Arg.Any<int>()).Returns(1);
+
+            int result = validation.UpdateValidUser(customerList[0], 1234);
+
+            Assert.That(result, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void UserVendorsTest()
+        {
+            userService.GetVendors(Arg.Any<int>()).Returns(vendorList);
+
+            List<Vendors> chkVendorList = validation.GetValidVendors(123);
+
+            Assert.That(chkVendorList, Is.EqualTo(vendorList));
+        }
+
+        [Test]
+        public void AddCustomerTest()
+        {
+            userService.AddCustomer(Arg.Any<Customers>()).Returns(true);
+
+            bool result = validation.AddCustomer(customerList[0]);
+
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        public void AddBankTest()
+        {
+            userService.AddBankDetails(Arg.Any<AccountDetails>(), Arg.Any<int>()).Returns(true);
+
+            bool result = validation.AddValidBankDetails(accountDetails, 123);
+
+            Assert.AreEqual(true,result);
+        }
+
+        [Test]
+        public void GetBankTest()
+        {
+            userService.GetBankDetails(Arg.Any<int>()).Returns(accountDetails);
+
+            AccountDetails checkAccount = validation.GetValidBankDetails(123);
+
+            Assert.AreEqual(accountDetails,checkAccount);
+        }
+
+        [Test]
+        public void GetVendorAmountTest()
+        {
+            userService.GetVendorAmountDue(Arg.Any<string>(), Arg.Any<int>()).Returns(999);
+
+            int result = validation.GetValidVendorAmountDue("123abc", 123);
+
+            Assert.AreEqual(999,result);
+        }
+
+        [Test]
+        public void AddTransactionTest()
+        {
+            userService.AddTransaction(Arg.Any<Transactions>()).Returns(true);
+
+            bool result=validation.AddValidTransaction(transactions[0]);
+
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void UpdateAmountTest()
+        {
+            userService.UpdateAmountDue(Arg.Any<string>()).Returns(true);
+
+            bool result = validation.UpdateAmountDue("abc123");
+
+            Assert.AreEqual(true, result);
+        }
+
+        [Test]
+        public void GetVendorByIdTest()
+        {
+            userService.GetVendorByID(Arg.Any<int>()).Returns(vendorList[0]);
+
+            Vendors chkvendor = validation.GetValidVendorByID(123);
+
+            Assert.AreEqual(vendorList[0], chkvendor);
+        }
+
+        [Test]
+        public void GetCategoryByIdTest()
+        {
+            userService.GetCategoryByID(Arg.Any<int>()).Returns(categoryList[0]);
+
+            Categories chkCategory = validation.GetValidCategoryByID(123);
+
+            Assert.AreEqual(categoryList[0], chkCategory);
+        }
+
+        [Test]
+        public void CustomerPaymentsTest()
+        {
+            userService.OverallPayments(Arg.Any<int>()).Returns(reportList);
+
+            List<Report>chkReports = validation.OverallPayments(111);
+
+            Assert.AreEqual(reportList, chkReports);
+        }
+
+        [Test]
+        public void ConsistencyTest()
+        {
+            userService.UpdateCustomerVendorForConsistency(Arg.Any<string>(), Arg.Any<int>()).Returns(true);
+
+            bool result = validation.UpdateCustomerVendorForConsistency("123abc", 123);
+
+            Assert.AreEqual(true, result);
+        }
+        #endregion
+    }
+}

@@ -1,0 +1,56 @@
+﻿@model PresentationLayer.Models.ViewModels.GetAmountViewModel
+
+@{
+    ViewBag.Title = "Get Bill";
+}
+
+<h2>Get Bill</h2>
+
+
+@using (Html.BeginForm("ShowAmount","Home")) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Get Amount</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Categories, ViewBag.Category as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Categories, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vendors, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Vendors, ViewBag.Vendor as SelectList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Vendors, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.UniqueID, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.UniqueID, new { @class = "form-control" })              
+            </div>
+        </div>
+       
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Search" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back", "Details")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

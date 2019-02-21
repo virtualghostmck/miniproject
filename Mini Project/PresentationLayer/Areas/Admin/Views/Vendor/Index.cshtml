@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Entities.Vendors>
+
+@{
+    ViewBag.Title = "Vendor Details";
+}
+
+
+
+<h2>List of Vendors</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.VendorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VendorAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContactInfo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GSTIN)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContactInfo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GSTIN)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.VendorID }) 
+            @*@Html.ActionLink("Details", "Details", new { id=item.VendorID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.VendorID })*@
+        </td>
+    </tr>
+}
+
+</table>
+
+<div>
+    @Html.ActionLink("Back", "Details", "AdminHimself")
+</div>

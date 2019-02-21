@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "LoginToContinue";
+}
+
+<h2>Login To Continue</h2>
+
+@ViewData["Message"]
+
+<br />
+<br />
+@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+

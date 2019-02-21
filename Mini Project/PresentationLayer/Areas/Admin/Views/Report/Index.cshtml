@@ -1,0 +1,114 @@
+﻿@model PresentationLayer.Areas.Admin.Models.ReportFilter
+
+@{
+    ViewBag.Title = "Filters";
+}
+
+<h2>Details By Category | Vendors</h2>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Filter Reports</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FilterType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.FilterType, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model=>model.FilterType,new List<SelectListItem>
+           {
+               new SelectListItem { Text="None",Value="0", Selected=true},
+               new SelectListItem { Text="Category",Value="1"},
+               new SelectListItem { Text="Vendor",Value="2"},
+               new SelectListItem { Text="City",Value="3"}
+           }, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Filter" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<h4>Reports</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().TransactionID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().TransactionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().VendorName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().CategoryName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().CustomerName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Reports.First().City)
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model.Reports) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TransactionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.VendorName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CategoryName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CustomerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.City)
+        </td>
+        
+    </tr>
+}
+
+</table>
+
+<div>
+    @Html.ActionLink("Back", "Details", "AdminHimself")
+</div>

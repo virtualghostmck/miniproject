@@ -1,0 +1,44 @@
+﻿
+@model PresentationLayer.Models.ViewModels.AdminViewModel
+
+
+    @{
+        ViewBag.Title = "Online Bill Payment System";
+    }
+
+    <h2>Online Bill Payment System</h2>
+
+    <div>
+        @*<h4>Welcome Admin</h4>*@
+
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+
+        </dl>
+    </div>
+
+
+
+    <p>
+        @Html.ActionLink("View Vendors", "Index", "Vendor", new { Area = "Admin" }, "") |
+        @Html.ActionLink("View Cities", "Index", "City", new { Area = "Admin" }, "") |
+        @Html.ActionLink("View Customers", "GetAllUsersByList", "Customers", new { Area = "Admin" }, "") |
+        @Html.ActionLink("View Reports", "Index", "Report", new { Area = "Admin" }, "") |
+        @Html.ActionLink("View Categories", "Index", "Category", new { Area = "Admin" }, "") @*|
+            @Html.ActionLink("Back to List", "Index")*@
+    </p>

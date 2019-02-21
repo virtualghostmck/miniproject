@@ -1,0 +1,48 @@
+﻿@model Entities.Transactions
+
+@{
+    ViewBag.Title = "Payment Details";
+}
+
+<h3>Receipt</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UniqueID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UniqueID)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("History", "PaymentHistory") |
+    @Html.ActionLink("Back to List", "Index")
+</p>
